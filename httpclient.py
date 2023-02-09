@@ -115,10 +115,14 @@ class HTTPClient(object):
         body = ""
 
         formattedArgs = ''
+        queryUrl = url
+
         if args:
             formattedArgs = self.concatParams(args)
-        
-        host, port, path = self.get_host_port(url)
+            if '?' not in url:
+                queryUrl = url + '?' + formattedArgs
+                
+        host, port, path = self.get_host_port(queryUrl)
 
         getCall = f'GET {path} HTTP/1.0\r\nHost: {host}:{port}\r\nAccept: text/html,application/xhtml+xml,application/xml\r\nAccept-Language: en-US,en\r\nContent-Length: {len(formattedArgs)}\r\nConnection: close\r\n\r\n{formattedArgs}'
 
